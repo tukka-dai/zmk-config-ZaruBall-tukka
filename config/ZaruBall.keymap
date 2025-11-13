@@ -20,6 +20,17 @@
 
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 100
 
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+/ {
+    /omit-if-no-ref/ zip_xy_transform: zip_xy_transform {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <1>;
+        type = <INPUT_EV_REL>;
+        y-codes = <INPUT_REL_Y>;
+        x-codes = <INPUT_REL_X>;
+    };
+};
+
 &trackball_listener {
     input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT | INPUT_TRANSFORM_X_INVERT)
                         &zip_temp_layer 1 500>;
@@ -30,6 +41,11 @@
                             &zip_xy_scaler 1 20
                             &zip_xy_to_scroll_mapper
                             >;
+    };
+    
+    arrow {
+        layers = <RAISE>;
+        input-processors = <&zip_rightmove>;
     };
 };
 
